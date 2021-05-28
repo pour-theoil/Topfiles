@@ -8,9 +8,19 @@ namespace topfiles
     {
         static void Main(string[] args)
         {
-            string sourceDirectory = @"C:\Users\frank\Downloads";
+            string sourceDirectory = "";
+            
+            if (args[0] == "-d")
+            {
+                Console.WriteLine(args[1]);
+                sourceDirectory = args[1];
+            }
+            else
+            {
+               sourceDirectory = @"C:\Users\frank\Downloads"; 
+            }
+            
             RecentFiles topfiles = new RecentFiles();
-
 
             try
             {
