@@ -75,7 +75,6 @@ namespace topfiles
                     {
                         Console.WriteLine($@"{i+1}) {pair.Key.filename} 
 created on {pair.Key.time}
-
 ");
                         i++;
                     }
