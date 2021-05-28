@@ -9,25 +9,32 @@ namespace topfiles
         static void Main(string[] args)
         {
             string sourceDirectory = "";
-            
-            if (args[0] == "-d")
+            int max = 10;
+            if (args?.Length > 0)
             {
-                Console.WriteLine(args[1]);
-                sourceDirectory = args[1];
+                if (args[0] == "-d")
+                {
+                    sourceDirectory = args[1];
+                }
             }
+
+
+            if (args.Length > 2)
+            {
+                if (args[2] == "-n")
+                {
+                    int.TryParse(args[3], out int num);
+                    max = num;
+                }
+            }
+
             else
             {
-               sourceDirectory = @"C:\Users\frank\Downloads"; 
+                sourceDirectory = @"C:\Users\frank\Downloads";
             }
 
 
-            int max = 10;
-            if (args[2] == "-n")
-            {
-                 int.TryParse(args[3], out int num);
-                 max = num;
-            }
-            
+
             RecentFiles topfiles = new RecentFiles();
 
             try
@@ -36,25 +43,17 @@ namespace topfiles
 
                 foreach (string currentFile in txtFiles)
                 {
-                    
+
                     string fileName = currentFile.Substring(sourceDirectory.Length + 1);
                     Files file = new Files(fileName);
-                    try
-                    {
-                        string path = $@"{sourceDirectory}\{fileName}";
 
-                        // Get the creation time of a well-known directory.
-                        DateTime dt = File.GetCreationTime(path);
-                        file.time = dt;
+                    FileInfo fi = new FileInfo($@"{sourceDirectory}\{fileName}");
 
-                        // var size = File.GetAttributes(path);
+                    long size = fi.Length;
+                    file.filesize = size;
 
-                    }
+                    file.time = fi.CreationTime;
 
-                    catch (Exception e)
-                    {
-                        Console.WriteLine("The process failed: {0}", e.ToString());
-                    }
                     topfiles.addFile(file, file.time);
 
                 }
@@ -63,23 +62,24 @@ namespace topfiles
             {
                 Console.WriteLine(e.Message);
             }
-            
+
             var sorted = from pair in topfiles.recents
-                             orderby pair.Value descending
-                             select pair;
+                         orderby pair.Value descending
+                         select pair;
 
             int i = 0;
             foreach (var pair in sorted)
+            {
+                if (i < max)
                 {
-                    if (i < max)
-                    {
-                        Console.WriteLine($@"{i+1}) {pair.Key.filename} 
-created on {pair.Key.time}
+                    Console.WriteLine($@"{i + 1}) {pair.Key.filename} 
+Created: {pair.Key.time}
+Size: {pair.Key.filesize/10000} mbs
 ");
-                        i++;
-                    }
+                    i++;
                 }
-                
+            }
+
 
 
 
