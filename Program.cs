@@ -19,6 +19,14 @@ namespace topfiles
             {
                sourceDirectory = @"C:\Users\frank\Downloads"; 
             }
+
+
+            int max = 10;
+            if (args[2] == "-n")
+            {
+                 int.TryParse(args[3], out int num);
+                 max = num;
+            }
             
             RecentFiles topfiles = new RecentFiles();
 
@@ -63,9 +71,12 @@ namespace topfiles
             int i = 0;
             foreach (var pair in sorted)
                 {
-                    if (i < 10)
+                    if (i < max)
                     {
-                        Console.WriteLine($"{pair.Key.filename} created on {pair.Key.time}");
+                        Console.WriteLine($@"{i+1}) {pair.Key.filename} 
+created on {pair.Key.time}
+
+");
                         i++;
                     }
                 }
